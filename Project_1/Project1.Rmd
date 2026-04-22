@@ -1,0 +1,74 @@
+---
+title: "visdat"
+author: "Wenli"
+date: 'nycflights13'
+output:
+  html_document:
+    theme: flatly
+    toc: yes
+    toc_float: yes
+    code_download: yes
+  pdf_document:
+    toc: yes
+---
+
+```{r, warning = FALSE, message = FALSE}
+# Load a R Package
+library(visdat)
+library(dplyr)
+```
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+# Load any dataset you may need
+# nycflights13: (https://cran.rstudio.com/bin/macosx/big-sur-x86_64/contrib/4.5/nycflights13_1.0.2.tgz)
+library(nycflights13)
+data <- planes
+```
+#Discribtion of the dataset:
+The dataset I used is nycflights13, that includes information about all flights departing NYC in 2013. It also includes useful"metadata" on a airlines, airports, weather, and planes. The specific data that I used from the nycflights13 is planes. This data includes some contents like tailnum, year, type, manufacturer, Model, number of engines, seats, speed and type of engines.
+
+# Function 1-vis_dat()
+vis_dat is a function that could display a total structure of a dataset and show the type of each variable. Also the function focused on the missed values.If we add "sort_type = FALSE" into the vis_dat function, the column will be sorted according to order from data table instead of following the type of the data when sorting columns.
+```{r}
+vis_dat(data)
+vis_dat(data, sort_type = FALSE)
+```
+## Discribtion of function 1：
+The first funstion visualize the data and highlight missing points and types of each variables.
+
+# Function 2-vis_compare()
+Vis_compare is a function that focuses on the difference of structure between two data. For example it would show whether the type of variables are the same and check if there is a missing data. All in all, this function compare whether two data look same but not compare the number of data.
+```{r}
+data_diff <- data
+data_diff$year <- as.character(data_diff$year)
+vis_compare(data_diff, data)
+data_diff[,4]<- NA
+vis_compare(data_diff, data)
+data_diff[1:1000,2:5] <- NA
+vis_compare(data_diff, data)
+```
+## Discribtion of function 2：
+The second function shows changes of the data, such as change of types of variables and missing points. The variable of year is changed from numeric variable to categorical variable. Also values in column 2 to five and rows 1 to 1000 are replaced by NA.
+
+# Function 3-vis_value
+This function mainly focuses on what values would look like for each variables. It is used to visualize the structure of values for each variable and it would check if there is an outlier. This function would use color from dark to light to indicate the magnitude of values. The function only works on numeric data
+```{r}
+str(data)
+data_num <-data%>% group_by(year, engines, seats, speed)%>% summarise(total_count=n())
+vis_value(data_num)
+```
+# Discribtion of function 3：
+This function shows magnitudes of different variables and missing data.
+
+# Overall summary
+The first function displays missing values and the types of all variables. The second funxtion focuses on comparing differences of structure between two data. It would show the change of types of variables, difference of missing values. The third function does not show demonstrate anything about structure of a data but it shows magnitude of numeric values and missing data.
+
+# Interesting point
+The interesting thing is that the second function could be used to demonstrate the change of a data directly so that we could tell what does the data change.
+
+# Challenging things
+There are some challenging things during the process. When I wrote the code, I kept considering about where I could find the functions that perfectly giving the result that I need. 
+
+
+
+
